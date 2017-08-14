@@ -171,6 +171,8 @@ Thumbs.db
 
 # Local directories #
 #####################
+resources/
+resources/*
 
 # Generated files #
 ###################
