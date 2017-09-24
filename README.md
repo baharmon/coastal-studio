@@ -26,6 +26,8 @@ Online, open educational materials for a coastal landscape architecture studio.
     2. [**Hydrological modeling**](#hydrological-modeling)
 ---
 
+# Assignments
+
 ## Site analysis
 
 ### Site visit
@@ -100,6 +102,27 @@ laying the framework for your first design moves.
 ...
 
 ### Concept model
+...
+
+# Tutorials
+
+## Terrain analysis
+Start GRASS GIS in the `utm17n_elmers_island` location
+and create a new mapset called `terrain_analysis`.
+
+Set your region to our study area with 1 meter resolution
+using the module
+[g.region](https://grass.osgeo.org/grass72/manuals/g.region.html)
+by specifying a reference raster map.
+```
+g.region raster=elevation res=1
+```
+
+*Under development*
+...
+
+## Hydrological modeling
+*Under development*
 ...
 
 # Submission
