@@ -3,7 +3,7 @@
 # Coastal studio
 Online, open educational materials for a coastal landscape architecture studio.
 
-<p align="center"><img src="images/elmers_island_flood.gif" height="500"></p>
+<p align="center"><img src="images/sea_level_rise.gif" height="500"></p>
 
 **Resources** [Geospatial data sources](geospatial-data-sources.md)
 
