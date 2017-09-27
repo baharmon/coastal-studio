@@ -122,10 +122,26 @@ g.region raster=elmers_elevation_2m_2012 res=2
 *Under development*
 ...
 
+```
+r.contour input=elmers_elevation_2m_2012@PERMANENT output=contours_25cm step=0.25 minlevel=0
+```
 
-### Smoothed contours for laser cutting
-*Under development*
-...
+```
+r.neighbors -c input=elmers_elevation_2m_2012@PERMANENT output=smoothed_elevation size=9
+```
+
+```
+r.contour --overwrite input=smoothed_elevation@PERMANENT output=contours_25cm step=0.25 minlevel=0
+```
+Right click on the `contour_25cm` map layer and select `change opacity level`.
+Set the opacity to 30%.
+
+```
+r.contour --overwrite input=smoothed_elevation@PERMANENT output=contours_1m step=1 minlevel=0
+```
+Right click on the `contour_25cm` map layer and select `change opacity level`.
+Set the opacity to 60%.
+
 
 ## Hydrological modeling
 Start GRASS GIS in the `nad83_utm15n_barataria` location
@@ -138,6 +154,19 @@ by specifying a reference raster map.
 ```
 g.region raster=elmers_elevation_2m_2012 res=2
 ```
+
+### Inundation modeling
+Model current sea level using the module
+[r.lake](https://grass.osgeo.org/grass72/manuals/r.lake.html).
+Set the water level to 0 meter, i.e. sea level.
+In the seed tab use the ![pointer](images/grass-gui/pointer.png)
+to pick coordinates somewhere out in the ocean on the map display
+for the starting point.
+```
+r.lake elevation=elmers_elevation_2m_2012@PERMANENT water_level=0 lake=sea_level
+```
+In the layer manager move the sea level map
+above the elevation and contour maps.
 
 ### Flow accumulation
 Model flow accumulation for our study area using the module
@@ -186,19 +215,6 @@ or running the command
 [d.legend](https://grass.osgeo.org/grass72/manuals/d.legend.html).
 Use the `-n` flag to hide categories
 that are not represented in the data.
-
-### Inundation modeling
-Model current sea level using the module
-[r.lake](https://grass.osgeo.org/grass72/manuals/r.lake.html).
-Set the water level to 0 meter, i.e. sea level.
-In the seed tab use the ![pointer](images/grass-gui/pointer.png)
-to pick coordinates somewhere out in the ocean on the map display
-for the starting point.
-```
-r.lake elevation=elmers_elevation_2m_2012@PERMANENT water_level=0 lake=sea_level
-```
-In the layer manager move the sea level map
-above the elevation and contour maps.
 
 ### Sea level rise animation
 Install the `r.lake.series` add-on with
