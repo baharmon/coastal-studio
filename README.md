@@ -107,23 +107,163 @@ laying the framework for your first design moves.
 # Tutorials
 
 ## Terrain analysis
-Start GRASS GIS in the `utm17n_elmers_island` location
+Start GRASS GIS in the `nad83_utm15n_barataria` location
 and create a new mapset called `terrain_analysis`.
 
-Set your region to our study area with 1 meter resolution
+Set your region to our study area with 2 meter resolution
 using the module
 [g.region](https://grass.osgeo.org/grass72/manuals/g.region.html)
 by specifying a reference raster map.
 ```
-g.region raster=elevation res=1
+g.region raster=elmers_elevation_2m_2012 res=2
 ```
 
+### Contours
+*Under development*
+...
+
+
+### Smoothed contours for laser cutting
 *Under development*
 ...
 
 ## Hydrological modeling
-*Under development*
-...
+Start GRASS GIS in the `nad83_utm15n_barataria` location
+and create a new mapset called `hydrology`.
+
+Set your region to our study area with 2 meter resolution
+using the module
+[g.region](https://grass.osgeo.org/grass72/manuals/g.region.html)
+by specifying a reference raster map.
+```
+g.region raster=elmers_elevation_2m_2012 res=2
+```
+
+### Flow accumulation
+Model flow accumulation for our study area using the module
+[r.watershed](https://grass.osgeo.org/grass72/manuals/r.watershed.html).
+```
+r.watershed -a elevation=elmers_elevation_2m_2012@PERMANENT accumulation=flow_accumulation
+```
+
+Use map algebra with the GRASS GIS Raster Map Calculator
+[r.mapcalc](https://grass.osgeo.org/grass72/manuals/r.mapcalc.html)
+to remove cells beneath sea level.
+```
+r.mapcalc "accumulation = if(isnull(sea_level@PERMANENT),flow_accumulation@hydrology,null())"
+```
+This expression means
+if there are cells where the sea level map is null (ie. has no value),
+then write the flow accumulation values,
+else write null values.
+
+
+Copy the color table from the `flow accumulation` map using
+[r.colors](https://grass.osgeo.org/grass72/manuals/r.colors.html)
+```
+r.colors map=accumulation@hydrology raster=flow_accumulation@hydrology
+```
+
+To see only the concentrated flow accumulation
+hide the cells with values less than `60`
+by either
+double clicking on the `accumulation` map in the layer manager
+and setting the list of values to display to `60-58849.4460216767`
+or running the command:
+```
+d.rast map=accumulation@hydrology values=60-58849.4460216767
+```
+Experiment to find the right minimum value.
+
+In the layer manager move the `accumulation` map layer
+above the `elmers_elevation_2m_2012` and `sea_level` map layers.
+
+Display the flow accumulation legend
+by either pressing the
+![legend](images/grass-gui/legend-add.png)
+`Add raster legend` button
+or running the command
+[d.legend](https://grass.osgeo.org/grass72/manuals/d.legend.html).
+Use the `-n` flag to hide categories
+that are not represented in the data.
+
+### Inundation modeling
+Model current sea level using the module
+[r.lake](https://grass.osgeo.org/grass72/manuals/r.lake.html).
+Set the water level to 0 meter, i.e. sea level.
+In the seed tab use the ![pointer](images/grass-gui/pointer.png)
+to pick coordinates somewhere out in the ocean on the map display
+for the starting point.
+```
+r.lake elevation=elmers_elevation_2m_2012@PERMANENT water_level=0 lake=sea_level
+```
+In the layer manager move the sea level map
+above the elevation and contour maps.
+
+### Sea level rise animation
+Install the `r.lake.series` add-on with
+[g.extension](https://grass.osgeo.org/grass72/manuals/g.extension.html).
+```
+g.extension extension=r.lake.series
+```
+
+Model sea level rise over time using the add-on module
+[r.lake.series](https://grass.osgeo.org/grass72/manuals/addons/r.lake.series.html).
+In the water tab
+set the starting water level to 0 m, the end water level to 2 m,
+and the water level step to 0.1 m.
+Use the ![pointer](images/grass-gui/pointer.png)
+to pick coordinates somewhere out in the ocean on the map display
+for the starting point.
+In the time tab set the time step to 5 years
+to model sea level rise over 100 years.
+This module will create a time series of raster maps
+named `sea_level_rise_0.0`, `sea_level_rise_0.1`, `sea_level_rise_0.2`, etc...
+that will all be registered in a space time raster dataset.
+```
+r.lake.series elevation=elmers_elevation_2m_2012@PERMANENT output=sea_level_rise start_water_level=0 end_water_level=2 water_level_step=0.1 coordinates=787832.669323,3232533.86454 time_step=5 time_unit=years
+```
+
+To animate this sea level rise time series launch the GRASS Animation Tool
+[g.gui.animation](https://grass.osgeo.org/grass72/manuals/g.gui.animation.html).
+If you launch the Animation Tool from the File menu in the GUI
+follow the these instructions.
+Create a new animation,
+add a space-time dataset layer,
+choose `space time raster dataset` as the input data type,
+and choose the `sea_level_rise` space time raster dataset.
+Then add a raster map layer
+and choose `elmers_elevation_2m_2012@PERMANENT`.
+Move this raster map layer beneath the space time raster dataset.
+Check the `Show raster legend` button
+and choose `elmers_elevation_2m_2012@PERMANENT`
+as the raster map in the d.legend dialog.
+Press `Ok` to create to the animation.
+Press `Play` to run the animation.
+Export your animation as an animated gif.
+Press the `Export` button,
+select export to `animated GIF`,
+then browse and name your file,
+and press `Export`.
+```
+g.gui.animation strds=sea_level_rise
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Submission
 Upload digital copies of your work to the class network drive
