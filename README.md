@@ -52,7 +52,7 @@ for at least 10 key species in each category.
 
 ### Laser cut model
 As a class build a laser cut contour model of Elmer's Island.
-**Due: 10/06**
+**Due: 10/13**
 * Material: museum board (4-ply) or chipboard (1/16" thick)
 * Contour interval: 0.25 m
 * Tiles: grid of 6 square tiles
