@@ -156,28 +156,43 @@ g.region raster=elmers_elevation_2m_2012 res=2
 ```
 
 ### Contours
-*Under development*
-...
 
+Compute contours from the digital elevation model using the module
+[r.contour](https://grass.osgeo.org/grass72/manuals/r.contour.html)
+with a 0.1 meter contour interval set with option `step=0.1`.
+Then compute 1 meter contours using the option `step=1`.
 ```
-r.contour input=elmers_elevation_2m_2012@PERMANENT output=contours_25cm step=0.25 minlevel=0
+r.contour input=elmers_elevation_2m_2012@PERMANENT output=contours_10cm step=0.1 minlevel=0
+r.contour input=elmers_elevation_2m_2012@PERMANENT output=contours_1m step=1 minlevel=0
 ```
 
+The contour map will be very noisy.
+To reduce the noise,
+first smooth the elevation map with
+[r.neighbors](https://grass.osgeo.org/grass72/manuals/r.neighbors.html),
+then rerun the contour command.
+Test different `size` parameters for `r.neighbors`.
 ```
 r.neighbors -c input=elmers_elevation_2m_2012@PERMANENT output=smoothed_elevation size=9
-```
-
-```
-r.contour --overwrite input=smoothed_elevation@PERMANENT output=contours_25cm step=0.25 minlevel=0
-```
-Right click on the `contour_25cm` map layer and select `change opacity level`.
-Set the opacity to 30%.
-
-```
+r.contour --overwrite input=smoothed_elevation@PERMANENT output=contours_10cm step=0.1 minlevel=0
 r.contour --overwrite input=smoothed_elevation@PERMANENT output=contours_1m step=1 minlevel=0
 ```
-Right click on the `contour_25cm` map layer and select `change opacity level`.
+
+Right click on the `contour_10cm` map layer and select `change opacity level`.
+Set the opacity to 30%.
+
+Right click on the `contour_1m` map layer and select `change opacity level`.
 Set the opacity to 60%.
+Double click on `contour_1m` in the layer manager,
+switch to the line tab,
+and make the line weight heavier (eg. 2 or 3 px).
+
+### Slope
+*Under development...*
+
+
+### Viewshed
+*Under development...*
 
 
 ## Hydrological modeling
