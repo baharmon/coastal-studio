@@ -98,11 +98,48 @@ laying the framework for your first design moves.
 * Environmental process diagram
 * Concept diagram
 
+## Masterplanning
+There will be a masterplanning charrette on **10/23**.
+In the charrette each team will draw a masterplan
+and a series of diagrams on trace.
+Diagrams may include circulation, program, and site systems.
+* Hand drawn masterplan
+* Hand drawn diagrams
+
 ## Site design
-...
 
 ### Concept model
-...
+Each group will build a physical conceptual model
+that develops and explains their driving design idea.
+For example this model may represent the structure of the boardwalk
+and it's interface with the land and water,
+it may show how new planting will shape the future evolution of the dunes,
+or it may explore how the program will retreat with rising relative sea level.
+
+### Site model
+
+### Illustrative plan
+
+### Sections
+
+### Diagrams
+
+### Planting plan
+Each group will develop an illustrative planting plan
+with a legend describing the plant selection.
+Each group will also develop a phased scheme for planting over time,
+which may be represented through sequential plans or axonometrics,
+sequential sections, or a diagram.
+**Due: 10/20**
+* Illustrative planting plan
+* Phased planting plan or diagram
+
+## Final review
+For the final review  on **11/30** curate a selection of your best work
+representing your site analysis, masterplanning, and site design.
+You must include a precedent study, a map, a masterplan, a site model,
+a site plan, an illustrative planting plan, a phased planting plan,
+2 sections, and 2 diagrams.
 
 # Tutorials
 
