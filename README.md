@@ -10,6 +10,9 @@ Online, open educational materials for a coastal landscape architecture studio.
 **Software** | [GRASS GIS](https://grass.osgeo.org) |
 [Rhino](https://www.rhino3d.com/) |
 
+**Tutorials** | [Intro to GRASS GIS](http://ncsu-geoforall-lab.github.io/grass-intro-workshop/) | 
+[lecture.lsu.edu/](https://lecture.lsu.edu/)
+
 ---
 ## Contents
 1. [**Assignments**](#terrain-modeling)
