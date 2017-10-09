@@ -154,16 +154,19 @@ by specifying a reference raster map.
 ```
 g.region raster=elmers_elevation_2m_2012 res=2
 ```
+Or set your region by specifying its boundaries.
+```
+g.region n=3236000 s=3230000 e=788000 w=782000 res=2 save=elmers
+```
 
 ### Contours
-
 Compute contours from the digital elevation model using the module
 [r.contour](https://grass.osgeo.org/grass72/manuals/r.contour.html)
 with a 0.1 meter contour interval set with option `step=0.1`.
 Then compute 1 meter contours using the option `step=1`.
 ```
-r.contour input=elmers_elevation_2m_2012@PERMANENT output=contours_10cm step=0.1 minlevel=0
-r.contour input=elmers_elevation_2m_2012@PERMANENT output=contours_1m step=1 minlevel=0
+r.contour input=elmers_elevation_2m_2012 output=contours_10cm step=0.1 minlevel=0
+r.contour input=elmers_elevation_2m_2012 output=contours_1m step=1 minlevel=0
 ```
 
 The contour map will be very noisy.
@@ -173,9 +176,9 @@ first smooth the elevation map with
 then rerun the contour command.
 Test different `size` parameters for `r.neighbors`.
 ```
-r.neighbors -c input=elmers_elevation_2m_2012@PERMANENT output=smoothed_elevation size=9
-r.contour --overwrite input=smoothed_elevation@PERMANENT output=contours_10cm step=0.1 minlevel=0
-r.contour --overwrite input=smoothed_elevation@PERMANENT output=contours_1m step=1 minlevel=0
+r.neighbors -c input=elmers_elevation_2m_2012 output=smoothed_elevation size=9
+r.contour --overwrite input=smoothed_elevation output=contours_10cm step=0.1 minlevel=0
+r.contour --overwrite input=smoothed_elevation output=contours_1m step=1 minlevel=0
 ```
 
 Right click on the `contour_10cm` map layer and select `change opacity level`.
@@ -187,13 +190,115 @@ Double click on `contour_1m` in the layer manager,
 switch to the line tab,
 and make the line weight heavier (eg. 2 or 3 px).
 
+### Hillshade
+The typical way to visualize hillshading with shaded relief using the module
+[r.relief](https://grass.osgeo.org/grass72/manuals/r.relief.html)
+is not very effective for flat landscapes.
+Instead use a sky-view factor visualization - a measure of
+the openness of the landscape -
+using the add-on module
+[r.skyview](https://grass.osgeo.org/grass72/manuals/addons/r.skyview.html).
+First call
+[g.extension](https://grass.osgeo.org/grass72/manuals/g.extension.html)
+to install the add-on.
+The first time you run the add-on with the command `r.skyview`
+you may need to include the flag
+`--ui` to force the graphical user interface to launch.
+With the color parameters you can create a colorized sky-view visualization
+by draping another map (such as the elevation map) over the sky-view.
+Optionally consider using the smoothed elevation as the input.
+```
+g.extension extension=r.skyview
+r.skyview --overwrite input=elmers_elevation_2m_2012 output=skyview ndir=16 color_source=color_input color_input=elevation_2m_2012 colorized_output=colorized_skyview
+```
+
 ### Slope
-*Under development...*
+Compute the slope and aspect of our study area's topography
+using the module
+[r.slope.aspect](https://grass.osgeo.org/grass72/manuals/r.slope.aspect.html).
+Optionally change the format from degrees to percent slope
+with the parameter `format=percent`.
+Also consider using the smoothed elevation as your input.
+```
+r.slope.aspect elevation=elmers_elevation_2m_2012 slope=elmers_slope
+```
 
+### Landforms
+Identify the landforms in our study area using
+a machine vision approach based on visibility
+with the add-on module
+[r.geomorphon](https://grass.osgeo.org/grass72/manuals/addons/r.geomorphon.html).
+First call
+[g.extension](https://grass.osgeo.org/grass72/manuals/g.extension.html)
+to install the add-on.
+Then run `r.geomorphon --ui` to compute basic landforms.
+The flag `--ui` may be needed to force the graphic user interface for the
+add-on to launch the first time.
+The smoothed elevation will probably generate clearer, more legible results
+than the source data elevation.
+Experiment with the
+`search`, `skip`, and `flat` parameters.
+```
+g.extension extension=r.geomorphon
+r.geomorphon -m elevation=smoothed_elevation forms=landforms search=50 skip=0 flat=1 dist=0
+```
+The landform types are:
+**1.** flat, **2.** summit, **3.** ridge, **4.** shoulder, **5.** spur,
+**6.** slope, **7.** hollow, **8.** footslope, **9.** valley,
+and **10.** depression.
 
-### Viewshed
-*Under development...*
+<p align="center"><img src="images/geomorphon_legend.png"></p>
 
+## Visibility
+Start GRASS GIS in the `nad83_utm15n_barataria` location
+and create a new mapset called `viewsheds`.
+
+Set your region to our study area with 2 meter resolution
+using the module
+[g.region](https://grass.osgeo.org/grass72/manuals/g.region.html)
+by specifying a reference raster map.
+```
+g.region raster=elmers_elevation_2m_2012 res=2
+```
+
+### Viewshed analysis
+Use the module
+[r.viewshed](https://grass.osgeo.org/grass72/manuals/r.viewshed.html)
+to compute a viewshed across the landscape.
+The viewshed is what is visible for an observer in a given location.
+Optionally change the height of the observer
+with the parameter `observer_elevation` to test views from a new structure like
+an observation tower, bird hide, boardwalk, or visitor center.
+Again consider using the smoothed elevation as your input.
+Experiment with the flags `-b` or `e` for different output formats.
+```
+r.viewshed input=elmers_elevation_2m_2012 output=viewshed coordinates=785051.917331,3232032.61952 observer_elevation=1.75
+```
+
+### Cumulative viewshed analysis
+Use the add-on module
+[r.viewshed.cva](https://grass.osgeo.org/grass72/manuals/addons/r.viewshed.cva.html)
+to compute the cumulative viewshed for multiple locations.
+Create a new vector map called `observers`.
+Use the vector digitizer
+![edit](images/grass-gui/edit.png)
+to create observer points.
+With the vector digitizer
+use the `digitize new point` command to create new points
+then quit the digitizer and save your changes.
+Use [g.extension](https://grass.osgeo.org/grass72/manuals/g.extension.html)
+to install the add-on.
+Then run `r.viewshed.cva --ui` to run the add-on module.
+The flag `--ui` may be needed to force the graphic user interface for the
+add-on to launch the first time.
+Use the new vector point map `observers` as your input vector map.
+Optionally change the height of the observers
+with the parameter `observer_elevation` to test views from new structures.
+Experiment with the flags `-b` or `e` for different output formats.
+```
+g.extension extension=r.viewshed.cva
+r.viewshed.cva input=elmers_elevation_2m_2012 vector=observers output=cumulative_viewsheds
+```
 
 ## Hydrological modeling
 Start GRASS GIS in the `nad83_utm15n_barataria` location
