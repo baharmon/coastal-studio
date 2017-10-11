@@ -10,7 +10,7 @@ Online, open educational materials for a coastal landscape architecture studio.
 **Software** | [GRASS GIS](https://grass.osgeo.org) |
 [Rhino](https://www.rhino3d.com/) |
 
-**Tutorials** | [Intro to GRASS GIS](http://ncsu-geoforall-lab.github.io/grass-intro-workshop/) | 
+**Tutorials** | [Intro to GRASS GIS](http://ncsu-geoforall-lab.github.io/grass-intro-workshop/) |
 [lecture.lsu.edu/](https://lecture.lsu.edu/)
 
 ---
@@ -23,7 +23,14 @@ Online, open educational materials for a coastal landscape architecture studio.
         4. [**Geospatial analysis and mapping**](#geospatial-analysis-and-mapping)
         5. [**Sections**](#sections)
         6. [**Diagrams**](#diagrams)
-    2. [**Site design**](#site-design)
+    2. [**Masterplanning**](#masterplanning)
+    3. [**Site design**](#site-design)
+        1. [**Concept model**](#concept-model)
+        2. [**Site model**](#site-model)
+        3. [**Illustrative plan**](#illustrative-plan)
+        4. [**Sections**](#sections)
+        5. [**Diagrams**](#diagrams)
+        6. [**Planting-plan**](#planting-plan)
 2. [**Tutorials**](#tutorials)
     1. [**Terrain analysis**](#terrain-analysis)
     2. [**Hydrological modeling**](#hydrological-modeling)
@@ -101,8 +108,11 @@ laying the framework for your first design moves.
 * Environmental process diagram
 * Concept diagram
 
+### Mid-review
+The mid-review will be on **10/23**.
+
 ## Masterplanning
-There will be a masterplanning charrette on **10/23**.
+There will be a masterplanning charrette on **10/25**.
 In the charrette each team will draw a masterplan
 and a series of diagrams on trace.
 Diagrams may include circulation, program, and site systems.
@@ -120,6 +130,9 @@ it may show how new planting will shape the future evolution of the dunes,
 or it may explore how the program will retreat with rising relative sea level.
 
 ### Site model
+Each group will build a polymeric sand model their zoomed-in site.
+Consider using a hollow or inverse contour model to cast the sand model.
+Then sculpt the sand model with your designed topography.
 
 ### Illustrative plan
 
